@@ -468,7 +468,7 @@ DirectionalLight {
 E-puck {
   translation -0.42719 -3.19585e-05 -0.44023
   rotation -9.589792999999999e-09 0.9999999999999999 -9.589792999999999e-09 4.712389
-  controller ""
+  controller "epuck_pathfinder"
   turretSlot [
     Compass {
     }
