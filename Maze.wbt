@@ -1,0 +1,487 @@
+#VRML_SIM R2020b utf8
+WorldInfo {
+  basicTimeStep 16
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation -0.8157976822547001 0.5506881896177639 0.17668236879601007 0.9475114169878746
+  position 1.15040658715186 1.4137766836693333 1.098304804801487
+  follow "e-puck"
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DirectionalLight {
+  ambientIntensity 1
+  direction 0 -1 0
+  intensity 0.2
+  castShadows TRUE
+}
+Floor {
+  size 1 1
+  texture [
+    "textures/steel_floor.jpg"
+  ]
+}
+DEF WALL_3_Solid Solid {
+  translation 0.004661 0.05 -0.512621
+  rotation 0 1 0 1.5708
+  scale 1.9 1.9 1.9
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.54
+      }
+    }
+  ]
+  name "solid 2"
+  boundingObject USE MA
+}
+DEF WALL_3_Solid Solid {
+  translation 0.504661 0.05 -0.002621
+  scale 1.9 1.9 1.9
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.54
+      }
+    }
+  ]
+  name "solid 3"
+  boundingObject USE MA
+}
+DEF WALL_3_Solid Solid {
+  translation -0.08 0.05 0.29
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.41
+      }
+    }
+  ]
+  name "solid 6"
+  boundingObject USE MA
+}
+DEF WALL_3_Solid Solid {
+  translation -0.495339 0.05 -0.002621
+  scale 1.9 1.9 1.9
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.54
+      }
+    }
+  ]
+  name "solid 7"
+  boundingObject USE MA
+}
+DEF WALL_1_Solid Solid {
+  translation -0.07 0.05 -0.07
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.28 0.1 0.01
+      }
+    }
+  ]
+  name "solid 8"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_1_Solid Solid {
+  translation 0.09004 0.05 -0.359097
+  rotation 0 1 0 1.5708
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.28 0.1 0.01
+      }
+    }
+  ]
+  name "solid 9"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_1_Solid Solid {
+  translation -0.22 0.05 -0.21
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.28 0.1 0.01
+      }
+    }
+  ]
+  name "solid 10"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_1_Solid Solid {
+  translation -0.01 0.05 0.22867
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.14 0.1 0.01
+      }
+    }
+  ]
+  name "solid 11"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_1_Solid Solid {
+  translation -0.28 0.05 0.36867
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.14 0.1 0.01
+      }
+    }
+  ]
+  name "solid 12"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_1_Solid Solid {
+  translation -0.43 0.05 0.08867
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.14 0.1 0.01
+      }
+    }
+  ]
+  name "solid 13"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_1_Solid Solid {
+  translation -0.15 0.05 0.08867
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.14 0.1 0.01
+      }
+    }
+  ]
+  name "solid 14"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_1_Solid Solid {
+  translation -0.30116328 0.05 -0.35196043
+  rotation 0 1 0 6.2831853
+  scale 1.2 1.2 1.2
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.14 0.1 0.01
+      }
+    }
+  ]
+  name "solid 15"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_1_Solid Solid {
+  translation 0.29 0.05 0.22867
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.14 0.1 0.01
+      }
+    }
+  ]
+  name "solid 16"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_1_Solid Solid {
+  translation 0.15 0.05 0.36867
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.14 0.1 0.01
+      }
+    }
+  ]
+  name "solid 17"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_3_Solid Solid {
+  translation -0.35 0.05 0.3
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.14
+      }
+    }
+  ]
+  name "solid 18"
+  boundingObject USE MA
+}
+DEF WALL_3_Solid Solid {
+  translation 0.22185611 0.05 0.30051065
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.14
+      }
+    }
+  ]
+  name "solid 19"
+  boundingObject USE MA
+}
+DEF WALL_3_Solid Solid {
+  translation -0.22 0.05 -0.28
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.14
+      }
+    }
+  ]
+  name "solid 20"
+  boundingObject USE MA
+}
+DEF WALL_3_Solid Solid {
+  translation -0.088297662 0.05 -0.27953323
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.14
+      }
+    }
+  ]
+  name "solid 21"
+  boundingObject USE MA
+}
+DEF WALL_1_Solid Solid {
+  translation 0.35 0.05 -0.34
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.28 0.1 0.01
+      }
+    }
+  ]
+  name "solid 22"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_3_Solid Solid {
+  translation 0.004661 0.05 0.507379
+  rotation 0 1 0 -1.5707953071795862
+  scale 1.9 1.9 1.9
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.54
+      }
+    }
+  ]
+  name "solid 24"
+  boundingObject USE MA
+}
+DEF WALL_1_Solid Solid {
+  translation 0.21 0.05 0.09
+  children [
+    DEF MAZE_WALL Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.28 0.1 0.01
+      }
+    }
+  ]
+  name "solid 25"
+  boundingObject USE MAZE_WALL
+}
+DEF WALL_3_Solid Solid {
+  translation 0.36 0.05 0.03
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.4
+      }
+    }
+  ]
+  name "solid 26"
+  boundingObject USE MA
+}
+DEF WALL_3_Solid Solid {
+  translation 0.21 0.049999998 -0.2
+  rotation 1 0 0 3.1415926
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.28
+      }
+    }
+  ]
+  name "solid 27"
+  boundingObject USE MA
+}
+DEF WALL_3_Solid Solid {
+  translation -0.21870183 0.049999999 -0.055906638
+  rotation 1 0 0 3.1415926
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.3
+      }
+    }
+  ]
+  name "solid 28"
+  boundingObject USE MA
+}
+DEF WALL_3_Solid Solid {
+  translation -0.22 0.050000002 0.23
+  rotation 1 0 0 3.1415926
+  children [
+    DEF MA Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.5 0.4
+        }
+      }
+      geometry Box {
+        size 0.01 0.1 0.28
+      }
+    }
+  ]
+  name "solid 29"
+  boundingObject USE MA
+}
+DirectionalLight {
+  direction 0 1 0
+}
+E-puck {
+  translation -0.42719 -3.19585e-05 -0.44023
+  rotation -9.589792999999999e-09 0.9999999999999999 -9.589792999999999e-09 4.712389
+  controller ""
+  turretSlot [
+    Compass {
+    }
+    SpotLight {
+      ambientIntensity 1
+      direction 0 1 -1
+      castShadows TRUE
+    }
+  ]
+}
+BB-8 {
+  translation 0.29 0 0.3
+  bodyRadius 0.025
+  headOffset 0.0025
+  headRadius 0.015
+}
