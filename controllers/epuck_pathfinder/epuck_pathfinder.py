@@ -399,6 +399,7 @@ def main():
             goal = transform_world_coord_to_map_coord(target_pose[:2])
             robot_pos = transform_world_coord_to_map_coord([pose_x,pose_y])
             #print((1,8))
+            print(pose_x,pose_y)
             robot_pos = [robot_pos[0],robot_pos[1]]
             prev = dijkstra(robot_pos)
             prev = reconstruct_path(prev, goal)

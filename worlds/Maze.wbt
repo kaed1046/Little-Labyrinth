@@ -4,8 +4,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.8157976822547001 0.5506881896177639 0.17668236879601007 0.9475114169878746
-  position 1.15040658715186 1.4137766836693333 1.098304804801487
+  orientation -0.9994546552908005 0.021736552410187092 -0.02485788218787375 1.4409502060245938
+  position 0.2134039457372696 4.1589326200385335 0.9562709641200108
   follow "e-puck"
 }
 Background {
@@ -20,13 +20,14 @@ DirectionalLight {
   castShadows TRUE
 }
 Floor {
+  translation 0.5 0 0.5
   size 1 1
   texture [
     "textures/steel_floor.jpg"
   ]
 }
 DEF WALL_3_Solid Solid {
-  translation 0.004661 0.05 -0.512621
+  translation 0.504661 0.05 -0.012621
   rotation 0 1 0 1.5708
   scale 1.9 1.9 1.9
   children [
@@ -45,7 +46,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_3_Solid Solid {
-  translation 0.504661 0.05 -0.002621
+  translation 1.00466 0.05 0.497379
   scale 1.9 1.9 1.9
   children [
     DEF MA Shape {
@@ -63,7 +64,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_3_Solid Solid {
-  translation -0.08 0.05 0.29
+  translation 0.42 0.05 0.79
   children [
     DEF MA Shape {
       appearance Appearance {
@@ -80,7 +81,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_3_Solid Solid {
-  translation -0.495339 0.05 -0.002621
+  translation 0.004661 0.05 0.497379
   scale 1.9 1.9 1.9
   children [
     DEF MA Shape {
@@ -98,7 +99,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_1_Solid Solid {
-  translation -0.07 0.05 -0.07
+  translation 0.43 0.05 0.43
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -115,7 +116,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid Solid {
-  translation 0.09004 0.05 -0.359097
+  translation 0.59004 0.05 0.140903
   rotation 0 1 0 1.5708
   children [
     DEF MAZE_WALL Shape {
@@ -133,7 +134,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid Solid {
-  translation -0.22 0.05 -0.21
+  translation 0.28 0.05 0.29
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -150,7 +151,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid Solid {
-  translation -0.01 0.05 0.22867
+  translation 0.49 0.05 0.72867
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -167,7 +168,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid Solid {
-  translation -0.28 0.05 0.36867
+  translation 0.22 0.05 0.86867
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -184,7 +185,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid Solid {
-  translation -0.43 0.05 0.08867
+  translation 0.07 0.05 0.58867
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -201,7 +202,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid Solid {
-  translation -0.15 0.05 0.08867
+  translation 0.35 0.05 0.58867
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -218,7 +219,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid Solid {
-  translation -0.30116328 0.05 -0.35196043
+  translation 0.198837 0.05 0.14804
   rotation 0 1 0 6.2831853
   scale 1.2 1.2 1.2
   children [
@@ -237,7 +238,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid Solid {
-  translation 0.29 0.05 0.22867
+  translation 0.79 0.05 0.72867
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -254,7 +255,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid Solid {
-  translation 0.15 0.05 0.36867
+  translation 0.65 0.05 0.86867
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -271,7 +272,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_3_Solid Solid {
-  translation -0.35 0.05 0.3
+  translation 0.15 0.05 0.8
   children [
     DEF MA Shape {
       appearance Appearance {
@@ -288,7 +289,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_3_Solid Solid {
-  translation 0.22185611 0.05 0.30051065
+  translation 0.721856 0.05 0.800511
   children [
     DEF MA Shape {
       appearance Appearance {
@@ -305,7 +306,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_3_Solid Solid {
-  translation -0.22 0.05 -0.28
+  translation 0.78 0.05 0.72
   children [
     DEF MA Shape {
       appearance Appearance {
@@ -322,7 +323,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_3_Solid Solid {
-  translation -0.088297662 0.05 -0.27953323
+  translation 0.411702 0.05 0.220467
   children [
     DEF MA Shape {
       appearance Appearance {
@@ -339,7 +340,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_1_Solid Solid {
-  translation 0.35 0.05 -0.34
+  translation 0.85 0.05 0.16
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -356,7 +357,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_3_Solid Solid {
-  translation 0.004661 0.05 0.507379
+  translation 0.504661 0.05 1.00738
   rotation 0 1 0 -1.5707953071795862
   scale 1.9 1.9 1.9
   children [
@@ -375,7 +376,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_1_Solid Solid {
-  translation 0.21 0.05 0.09
+  translation 0.71 0.05 0.59
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -392,7 +393,7 @@ DEF WALL_1_Solid Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_3_Solid Solid {
-  translation 0.36 0.05 0.03
+  translation 0.86 0.05 0.53
   children [
     DEF MA Shape {
       appearance Appearance {
@@ -409,7 +410,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_3_Solid Solid {
-  translation 0.21 0.049999998 -0.2
+  translation 0.71 0.05 0.3
   rotation 1 0 0 3.1415926
   children [
     DEF MA Shape {
@@ -427,7 +428,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_3_Solid Solid {
-  translation -0.21870183 0.049999999 -0.055906638
+  translation 0.281298 0.05 0.444093
   rotation 1 0 0 3.1415926
   children [
     DEF MA Shape {
@@ -445,7 +446,7 @@ DEF WALL_3_Solid Solid {
   boundingObject USE MA
 }
 DEF WALL_3_Solid Solid {
-  translation -0.22 0.050000002 0.23
+  translation 0.28 0.05 0.73
   rotation 1 0 0 3.1415926
   children [
     DEF MA Shape {
@@ -466,8 +467,8 @@ DirectionalLight {
   direction 0 1 0
 }
 DEF EPUCK E-puck {
-  translation -0.42719 -3.19585e-05 -0.44023
-  rotation -9.589792999999999e-09 0.9999999999999999 -9.589792999999999e-09 4.712389
+  translation 0.07281 -3.19872e-05 0.05977
+  rotation 3.3390106957222625e-06 0.9999999999887877 -3.3579533490851225e-06 -1.5707963071908246
   controller "epuck_pathfinder"
   supervisor TRUE
   turretSlot [
@@ -481,7 +482,7 @@ DEF EPUCK E-puck {
   ]
 }
 DEF Goal BB-8 {
-  translation 0.29 0 0.3
+  translation 0.79 -0.0134401 0.8
   bodyRadius 0.025
   headOffset 0.0025
   headRadius 0.015
