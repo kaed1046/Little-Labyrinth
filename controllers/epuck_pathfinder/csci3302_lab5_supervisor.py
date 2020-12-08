@@ -17,7 +17,6 @@ def init_supervisor():
 
     # create the Supervisor instance.
     supervisor = Supervisor()
-
     # do this once only
     root = supervisor.getRoot() 
     root_children_field = root.getField("children") 
