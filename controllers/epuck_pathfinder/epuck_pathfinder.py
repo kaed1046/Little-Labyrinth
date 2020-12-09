@@ -7,6 +7,7 @@ import copy
 from controller import Robot, Motor, DistanceSensor
 import csci3302_lab5_supervisor
 import numpy as np
+import operator
 
 
 
@@ -86,6 +87,9 @@ WHEEL_BACKWARD = -1
 theta_gain = 1.0
 distance_gain = 0.3
 
+#params
+waypoints = []
+puckstart = (0,0)
 
 EPUCK_MAX_WHEEL_SPEED = 0.12880519 # m/s
 EPUCK_AXLE_DIAMETER = 0.053 # ePuck's wheels are 53mm apart.
@@ -245,44 +249,59 @@ def get_travel_cost(source_vertex, dest_vertex):
     @return cost: Cost to travel from source to dest vertex.
     """
     global world_map
-    cost = 0
-    if source_vertex == dest_vertex:
-        return cost
-    if world_map[dest_vertex[0]][dest_vertex[1]] == 1:
-        cost = 1e5
-    cost += abs(source_vertex[0]-dest_vertex[0]) + abs(source_vertex[1]-dest_vertex[1])
-    return cost
-
-
-def extractMin(x):
-    x.sort(key=lambda x:x[1],reverse=True)
-    return x.pop()
     
-def validVertex(v):
-    global world_map
-    if v[0] >= 0 and v[0] < world_map.shape[0] and v[1] >= 0 and v[1] < world_map.shape[1]:
-        return True
-    return False   
+    source_vertex = (int(source_vertex[0]), int(source_vertex[1]))
+    dest_vertex = (int(dest_vertex[0]), int(dest_vertex[1]))
+    
+    if (world_map[tuple(source_vertex)] == 1 or world_map[tuple(dest_vertex)] == 1) or \
+    (abs(source_vertex[0]-dest_vertex[0]) > 1) or (abs(source_vertex[1]-dest_vertex[1]) > 1) or \
+    (abs(source_vertex[0]-dest_vertex[0]) == 1 and abs(source_vertex[1]-dest_vertex[1]) == 1):
+        cost = 1e5
+    elif(source_vertex == dest_vertex):
+        cost = 0
+    else:
+        cost = 1
+    
+    return cost
+    
+    # cost = 0
+    # if source_vertex == dest_vertex:
+        # return cost
+    # if world_map[dest_vertex[0]][dest_vertex[1]] == 1:
+        # cost = 1e5
+    # cost += abs(source_vertex[0]-dest_vertex[0]) + abs(source_vertex[1]-dest_vertex[1])
+    # return cost
 
-def getNeighbors(v):
-    neighbors = []
-    for i in range(0,2):
-        for j in range(0,2):
-            new_neighbor = (v[0]+i,v[1]+j)
-            if validVertex(new_neighbor):
-                neighbors.append(new_neighbor)
-    return neighbors
-def getNeighborsNew(v):
-    neighbors = []
-    up = (v[0]+1,v[1])
-    down = (v[0]-1,v[1])
-    left = (v[0],v[1]-1)
-    right = (v[0],v[1]+1)
-    dirs = [up,down,right,left]
-    for move in dirs:
-        if validVertex(move):
-            neighbors.append(move)
-    return neighbors
+
+# def extractMin(x):
+    # x.sort(key=lambda x:x[1],reverse=True)
+    # return x.pop()
+    
+# def validVertex(v):
+    # global world_map
+    # if v[0] >= 0 and v[0] < world_map.shape[0] and v[1] >= 0 and v[1] < world_map.shape[1]:
+        # return True
+    # return False   
+
+# def getNeighbors(v):
+    # neighbors = []
+    # for i in range(0,2):
+        # for j in range(0,2):
+            # new_neighbor = (v[0]+i,v[1]+j)
+            # if validVertex(new_neighbor):
+                # neighbors.append(new_neighbor)
+    # return neighbors
+# def getNeighborsNew(v):
+    # neighbors = []
+    # up = (v[0]+1,v[1])
+    # down = (v[0]-1,v[1])
+    # left = (v[0],v[1]-1)
+    # right = (v[0],v[1]+1)
+    # dirs = [up,down,right,left]
+    # for move in dirs:
+        # if validVertex(move):
+            # neighbors.append(move)
+    # return neighbors
 ###################
 # Part 1.2
 ###################
@@ -293,36 +312,42 @@ def dijkstra(source_vertex):
     """
     #print("hm")
     global world_map
-    
+
     # TODO: Initialize these variables
-    dist = np.zeros([world_map.shape[0],world_map.shape[1]])
+    dist = {}
+    q_cost = {}
     prev = {}
-    rows = world_map.shape[0]
-    cols = world_map.shape[1]
-    q_cost = [(source_vertex,0)]
-    dist[source_vertex[0],source_vertex[1]] = 0
-    for i in range (0, rows):
-        for j in range(0, cols):
-            v = [i,j]
+
+    # TODO: Your code here
+    dist[source_vertex] = 0
+    for x in range(world_map.shape[0]):
+        for y in range(world_map.shape[1]):
+            v = (x, y)
             if v != source_vertex:
-                dist[i][j] = float('inf')
-                prev[(i,j)] = None
-            
-    #print("ok")
+                dist[v] = 1000000
+            prev[v] = -1
+            q_cost[v] = dist[v]
+        
     while len(q_cost) != 0:
-        u_tuple = extractMin(q_cost)
-        u = u_tuple[0]
-        neighbors = getNeighborsNew(u)
-        #print(len(q_cost))
-        for v in neighbors:
-            alt = dist[u[0]][u[1]] + get_travel_cost(u,v)
-            if alt < dist[v[0]][v[1]]: 
-                dist[v[0]][v[1]] = alt
-                prev[(v[0],v[1])] = u
-                count = 0
-                #print("ok2")
-                q_cost.append((v,alt))    
-    
+        sortedlist = sorted(q_cost.items(), key=operator.itemgetter(1))
+        temp, accdist = sortedlist[0]
+        temp = (int(temp[0]), int(temp[1]))
+        q_cost.pop(temp)
+        neighbors = []
+        if temp[0] != 0:
+            neighbors.append((temp[0]-1,temp[1]))
+        if temp[0] != (world_map.shape[0]-1):
+            neighbors.append((temp[0]+1,temp[1]))
+        if temp[1] != 0:
+            neighbors.append((temp[0],temp[1]-1))
+        if temp[1] != (world_map.shape[1]-1):
+            neighbors.append((temp[0],temp[1]+1))
+        for x in neighbors:
+            totdist = int(accdist) + get_travel_cost(temp, x)
+            if totdist < dist[x]:
+                dist[x] = totdist
+                prev[x] = temp
+                q_cost[x] = totdist
     
     return prev
 
@@ -338,9 +363,11 @@ def reconstruct_path(prev, goal_vertex):
     """
     path = [goal_vertex]
     temp = prev[goal_vertex]
+    
     while(temp != -1):
         path.insert(0, temp)
         temp = prev[temp]
+        
     return path
 
 
@@ -352,17 +379,13 @@ def visualize_path(path):
     @param path: List of graph vertices along the robot's desired path    
     """
     global world_map
-    count = 0
-    print(path)
-    print(len(path))
-    for key in path:
-        if count == 0:
-            world_map[key[0]][key[1]] = 4
-        elif count == len(path)-1:
-            world_map[key[0]][key[1]] = 3
-        else:
-            world_map[key[0]][key[1]] = 2
-        count = count + 1
+    
+    path2 = path.copy()
+    world_map[path2.pop(0)] = 4
+    world_map[path2.pop(-1)] = 3
+    
+    while len(path2) != 0:
+        world_map[path2.pop()] = 2
     # TODO: Set a value for each vertex along path in the world_map for rendering: 2 = Path, 3 = Goal, 4 = Start
     
     return
@@ -414,44 +437,21 @@ def main():
             ###################
             # Part 2.1a
             ###################       
-            # Compute a path from start to target_pose
+            # Compute a path from start to target_pose           
             goalV = transform_world_coord_to_map_coord((target_pose[0], target_pose[1]))
-            startV = transform_world_coord_to_map_coord((pose_x,pose_y))
-            #print((1,8))
-            #robot_pos = [robot_pos[0],robot_pos[1]]
+            startV = transform_world_coord_to_map_coord((pose_x, pose_y))
             
             prev = dijkstra(startV)
             sol = reconstruct_path(prev, goalV)
-            path_length = len(prev)
-            display_map(world_map)
-            counter = 1
             if startV in sol:
                 visualize_path(sol)
-                state = 'get_waypoint'
-            pass
-            
+                state = "get_waypoint"
         elif state == 'get_waypoint':
             ###################
             # Part 2.1b
             ###################       
-            # Get the next waypoint from the path
-            #print(counter, path_length)
-            #if counter == path_length:
-            #    #TODO LAST VERTEX 
-            #    #print("hmm")
-            ##    continue;
-            #way_point = prev[counter]
-            #print(way_point)
-            #goal_pose = transform_map_coord_world_coord(way_point)
-            #if counter == path_length-1:
-            #    bearing_error = target_pose[2]
-            #else:
-            #    next_wp = transform_map_coord_world_coord(prev[counter+1])
-            #    bearing_error = math.atan2((next_wp[1] - goal_pose[1]), (next_wp[0] - goal_pose[0]) )
-            #target_wp = [goal_pose[0],goal_pose[1],bearing_error]
-            #print(bearing_error)
-            #counter = counter + 1
-            #state = 'move_to_waypoint'
+            # Get the next waypoint from the path            
+            # populate waypoints with solution array
             if(len(sol) != 0):
                 x = sol.pop(0)
             if(sol == []):
@@ -463,11 +463,11 @@ def main():
                 theta = math.atan2(nextPoint[1] - currentPoint[1], nextPoint[0] - currentPoint[0])
             newWaypoint = (currentPoint, theta)
             waypoints.append(newWaypoint)
+            
             if waypoints == []:
                 state = "get_path"
             else:
                 state = "move_to_waypoint"
-            pass
         elif state == 'move_to_waypoint':
             ###################
             # Part 2.1c
@@ -475,22 +475,32 @@ def main():
 
             # Hint: Use the IK control function to travel to the current waypoint
             # Syntax/Hint for using the IK Controller:
-            lspeed, rspeed = get_wheel_speeds(target_wp)
-            if lspeed == 0 and rspeed == 0:
-                state = 'get_waypoint'
-           
+            lspeed, rspeed = get_wheel_speeds((nextPoint[0], nextPoint[1], theta))
             leftMotor.setVelocity(lspeed)
             rightMotor.setVelocity(rspeed)
+            if lspeed == 0 and rspeed == 0:
+                left_wheel_direction, right_wheel_direction = 0, 0
+                leftMotor.setVelocity(0)
+                rightMotor.setVelocity(0)
+                state = 'get_waypoint'
+        elif state == "get_backpath":
+            goalV = transform_world_coord_to_map_coord((target_pose[0], target_pose[1]))
+            startV = transform_world_coord_to_map_coord((pose_x, pose_y))
             
-            #print(distance_error,heading_error)
-            
-            pass
+            prev = dijkstra(startV)
+            sol = reconstruct_path(prev, goalV)
+            if startV in sol:
+                visualize_path(sol)
+                state = "get_waypoint"
         else:
-            # Stop   
+            # Stop
+            left_wheel_direction, right_wheel_direction = 0, 0
+            leftMotor.setVelocity(0)
+            rightMotor.setVelocity(0)    
             pass
             
             
-        #display_map(world_map)
+        display_map(world_map)
         #print(world_map.shape[0])
     
 if __name__ == "__main__":
