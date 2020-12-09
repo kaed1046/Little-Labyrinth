@@ -48,10 +48,19 @@ def supervisor_get_obstacle_positions():
 
     root_children_field = supervisor.getRoot().getField("children") 
     for idx in range(root_children_field.getCount()):
-        if root_children_field.getMFNode(idx).getTypeName() == "CardboardBox":
+        #print(root_children_field.getMFNode(idx).getDef())
+        #y ones 
+        if root_children_field.getMFNode(idx).getDef() == "WALL_3_Solid_y" or root_children_field.getMFNode(idx).getDef() == "WALL_1_Solid_y" or root_children_field.getMFNode(idx).getDef() == "WALL_1_Solid_x" or root_children_field.getMFNode(idx).getDef() == "WALL_3_Solid_x":
             box_node = root_children_field.getMFNode(idx)
+            if root_children_field.getMFNode(idx).getDef() == "WALL_3_Solid_y" or root_children_field.getMFNode(idx).getDef() == "WALL_1_Solid_y":
+                #index 2 is where the change is
+                size = ("y", root_children_field.getMFNode(idx).getField("children").getMFNode(0).getField("geometry").getSFNode().getField("size").getSFVec3f()[2])
+            else:
+                size = ("x", root_children_field.getMFNode(idx).getField("children").getMFNode(0).getField("geometry").getSFNode().getField("size").getSFVec3f()[0])
+            #print(root_children_field.getMFNode(idx).getField("children").getMFNode(0).getField("geometry").getSFNode().getField("size").getSFVec3f())
+            
             box_coords = box_node.getField("translation").getSFVec3f()
-            coords_list.append(np.array([box_coords[0], 1 - box_coords[2]]))
+            coords_list.append((np.array([box_coords[0], 1 - box_coords[2]]),size))
 
     return coords_list
 

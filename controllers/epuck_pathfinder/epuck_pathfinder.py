@@ -22,7 +22,7 @@ robot = csci3302_lab5_supervisor.supervisor
 
 # Map Variables
 MAP_BOUNDS = [1.,1.] 
-CELL_RESOLUTIONS = np.array([0.1, 0.1]) # 10cm per cell
+CELL_RESOLUTIONS = np.array([0.01, 0.01]) # 10cm per cell
 NUM_X_CELLS = int(MAP_BOUNDS[0] / CELL_RESOLUTIONS[0])
 NUM_Y_CELLS = int(MAP_BOUNDS[1] / CELL_RESOLUTIONS[1])
 
@@ -30,20 +30,34 @@ world_map = np.zeros([NUM_Y_CELLS,NUM_X_CELLS])
 
 def populate_map(m):
     obs_list = csci3302_lab5_supervisor.supervisor_get_obstacle_positions()
-    obs_size = 0.06 # 6cm boxes
-    for obs in obs_list:
-        obs_coords_lower = obs - obs_size/2.
-        obs_coords_upper = obs + obs_size/2.
-        obs_coords = np.linspace(obs_coords_lower, obs_coords_upper, 10)
+    #obs_size = 0.06 # 6cm boxes
+    for obs, size_tuple in obs_list:
+        #print(size_tuple)
+        obs_size = size_tuple[1]
+        if size_tuple[0] == "y":
+            obs_coords_lower_left = [obs[0]-.005, obs[1] - size_tuple[1]/2]  
+            obs_coords_upper_right = [obs[0]+.005, obs[1] + size_tuple[1]/2]
+            obs_coords_lower_right = [obs[0]+.005, obs[1] - size_tuple[1]/2]  
+            obs_coords_upper_left = [obs[0]-.005, obs[1] + size_tuple[1]/2]
+                    
+        else:
+            obs_coords_lower_left = [obs[0]- size_tuple[1]/2, obs[1] - .005]  
+            obs_coords_upper_right = [obs[0]+ size_tuple[1]/2, obs[1] + .005]
+            obs_coords_lower_right = [obs[0] + size_tuple[1]/2, obs[1] - .005]  
+            obs_coords_upper_left = [obs[0] - size_tuple[1]/2, obs[1] + .005]
+
+        obs_coords = np.linspace(obs_coords_lower_left, obs_coords_upper_left, 80)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
-        obs_coords_lower = [obs[0] - obs_size/2, obs[1] + obs_size/2.]
-        obs_coords_upper = [obs[0] + obs_size/2., obs[1] - obs_size/2.]
-        obs_coords = np.linspace(obs_coords_lower, obs_coords_upper, 10)
+        obs_coords = np.linspace(obs_coords_lower_left, obs_coords_lower_right, 80)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
-
-
+        obs_coords = np.linspace(obs_coords_lower_right, obs_coords_upper_right, 80)
+        for coord in obs_coords:
+            m[transform_world_coord_to_map_coord(coord)] = 1
+        obs_coords = np.linspace(obs_coords_upper_left, obs_coords_upper_right, 80)
+        for coord in obs_coords:
+            m[transform_world_coord_to_map_coord(coord)] = 1
 # Robot Pose Values
 pose_x = 0
 pose_y = 0
@@ -223,7 +237,7 @@ def get_travel_cost(source_vertex, dest_vertex):
     if source_vertex == dest_vertex:
         return cost
     if world_map[dest_vertex[0]][dest_vertex[1]] == 1:
-        cost = 1
+        cost = 1e5
     cost += abs(source_vertex[0]-dest_vertex[0]) + abs(source_vertex[1]-dest_vertex[1])
     return cost
 
@@ -265,7 +279,7 @@ def dijkstra(source_vertex):
     @param source_vertex: Starting vertex for the search algorithm.
     @return prev: Data structure that maps every vertex to the coordinates of the previous vertex (along the shortest path back to source)
     """
-    print("hm")
+    #print("hm")
     global world_map
     
     # TODO: Initialize these variables
@@ -399,7 +413,6 @@ def main():
             goal = transform_world_coord_to_map_coord(target_pose[:2])
             robot_pos = transform_world_coord_to_map_coord([pose_x,pose_y])
             #print((1,8))
-            print(pose_x,pose_y)
             robot_pos = [robot_pos[0],robot_pos[1]]
             prev = dijkstra(robot_pos)
             prev = reconstruct_path(prev, goal)
