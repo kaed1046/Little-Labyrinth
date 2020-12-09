@@ -488,6 +488,7 @@ def main():
 
             # Hint: Use the IK control function to travel to the current waypoint
             # Syntax/Hint for using the IK Controller:
+            
             lspeed, rspeed = get_wheel_speeds((nextPoint[0], nextPoint[1], theta))
             leftMotor.setVelocity(lspeed)
             rightMotor.setVelocity(rspeed)
@@ -513,7 +514,7 @@ def main():
             rightMotor.setVelocity(0)    
             pass
             
-        print(state)
+        #print(state)
         # print(waypoints)
             
             
