@@ -135,9 +135,9 @@ def get_wheel_speeds(target_pose):
     pose_x, pose_y, pose_theta = csci3302_lab5_supervisor.supervisor_get_robot_pose()
 
 
-    bearing_error = math.atan2( (target_pose[1] - pose_y), (target_pose[0] - pose_x) ) - pose_theta
+    bearing_error = get_bounded_theta(math.atan2( (target_pose[1] - pose_y), (target_pose[0] - pose_x) ) - pose_theta)
     distance_error = np.linalg.norm(target_pose[:2] - np.array([pose_x,pose_y]))
-    heading_error = target_pose[2] -  pose_theta
+    heading_error = get_bounded_theta(target_pose[2] -  pose_theta)
 
     BEAR_THRESHOLD = 0.06
     DIST_THRESHOLD = 0.03
@@ -337,17 +337,10 @@ def reconstruct_path(prev, goal_vertex):
     @return path: List of vertices where path[0] = source_vertex_ij_coords and path[-1] = goal_vertex_ij_coords
     """
     path = [goal_vertex]
-    i = goal_vertex[0]
-    j = goal_vertex[1]
-    while (i,j) in prev:
-        path.append(prev[(i,j)])
-        temp_i = i
-        temp_j = j
-        i = prev[(temp_i,temp_j)][0]
-        j = prev[(temp_i,temp_j)][1] 
-    # Hint: Start at the goal_vertex and work your way backwards using prev until there's no "prev" left to follow.
-    #       Then, reverse the list and return it!
-    path.reverse()
+    temp = prev[goal_vertex]
+    while(temp != -1):
+        path.insert(0, temp)
+        temp = prev[temp]
     return path
 
 
@@ -422,18 +415,19 @@ def main():
             # Part 2.1a
             ###################       
             # Compute a path from start to target_pose
-            goal = transform_world_coord_to_map_coord(target_pose[:2])
-            robot_pos = transform_world_coord_to_map_coord([pose_x,pose_y])
+            goalV = transform_world_coord_to_map_coord((target_pose[0], target_pose[1]))
+            startV = transform_world_coord_to_map_coord((pose_x,pose_y))
             #print((1,8))
-            robot_pos = [robot_pos[0],robot_pos[1]]
-            prev = dijkstra(robot_pos)
-            prev = reconstruct_path(prev, goal)
+            #robot_pos = [robot_pos[0],robot_pos[1]]
+            
+            prev = dijkstra(startV)
+            sol = reconstruct_path(prev, goalV)
             path_length = len(prev)
-            visualize_path(prev)
             display_map(world_map)
             counter = 1
-            if prev[0] == robot_pos:
-                state = 'get_waypoint'    
+            if startV in sol:
+                visualize_path(sol)
+                state = 'get_waypoint'
             pass
             
         elif state == 'get_waypoint':
@@ -442,22 +436,37 @@ def main():
             ###################       
             # Get the next waypoint from the path
             #print(counter, path_length)
-            if counter == path_length:
-                #TODO LAST VERTEX 
-                #print("hmm")
-                continue;
-            way_point = prev[counter]
-            print(way_point)
-            goal_pose = transform_map_coord_world_coord(way_point)
-            if counter == path_length-1:
-                bearing_error = target_pose[2]
-            else:
-                next_wp = transform_map_coord_world_coord(prev[counter+1])
-                bearing_error = math.atan2((next_wp[1] - goal_pose[1]), (next_wp[0] - goal_pose[0]) )
-            target_wp = [goal_pose[0],goal_pose[1],bearing_error]
+            #if counter == path_length:
+            #    #TODO LAST VERTEX 
+            #    #print("hmm")
+            ##    continue;
+            #way_point = prev[counter]
+            #print(way_point)
+            #goal_pose = transform_map_coord_world_coord(way_point)
+            #if counter == path_length-1:
+            #    bearing_error = target_pose[2]
+            #else:
+            #    next_wp = transform_map_coord_world_coord(prev[counter+1])
+            #    bearing_error = math.atan2((next_wp[1] - goal_pose[1]), (next_wp[0] - goal_pose[0]) )
+            #target_wp = [goal_pose[0],goal_pose[1],bearing_error]
             #print(bearing_error)
-            counter = counter + 1
-            state = 'move_to_waypoint'
+            #counter = counter + 1
+            #state = 'move_to_waypoint'
+            if(len(sol) != 0):
+                x = sol.pop(0)
+            if(sol == []):
+                theta = target_pose[2]
+                currentPoint = transform_map_coord_world_coord(x)
+            else:
+                nextPoint = transform_map_coord_world_coord(sol[0])
+                currentPoint = transform_map_coord_world_coord(x)
+                theta = math.atan2(nextPoint[1] - currentPoint[1], nextPoint[0] - currentPoint[0])
+            newWaypoint = (currentPoint, theta)
+            waypoints.append(newWaypoint)
+            if waypoints == []:
+                state = "get_path"
+            else:
+                state = "move_to_waypoint"
             pass
         elif state == 'move_to_waypoint':
             ###################
@@ -466,9 +475,6 @@ def main():
 
             # Hint: Use the IK control function to travel to the current waypoint
             # Syntax/Hint for using the IK Controller:
-            # lspeed, rspeed = get_wheel_speeds(target_wp)
-            # leftMotor.setVelocity(lspeed)
-            # rightMotor.setVelocity(rspeed)
             lspeed, rspeed = get_wheel_speeds(target_wp)
             if lspeed == 0 and rspeed == 0:
                 state = 'get_waypoint'
