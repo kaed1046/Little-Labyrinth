@@ -23,7 +23,7 @@ robot = csci3302_lab5_supervisor.supervisor
 
 # Map Variables
 MAP_BOUNDS = [1.,1.] 
-CELL_RESOLUTIONS = np.array([0.01, 0.01]) # 10cm per cell
+CELL_RESOLUTIONS = np.array([0.02, 0.02]) # 10cm per cell
 NUM_X_CELLS = int(MAP_BOUNDS[0] / CELL_RESOLUTIONS[0])
 NUM_Y_CELLS = int(MAP_BOUNDS[1] / CELL_RESOLUTIONS[1])
 
@@ -59,16 +59,16 @@ def populate_map(m):
                 corners[i][1] = 0
             i = i+1
                 
-        obs_coords = np.linspace(obs_coords_lower_left, obs_coords_upper_left, 80)
+        obs_coords = np.linspace(obs_coords_lower_left, obs_coords_upper_left, 25)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
-        obs_coords = np.linspace(obs_coords_lower_left, obs_coords_lower_right, 80)
+        obs_coords = np.linspace(obs_coords_lower_left, obs_coords_lower_right, 25)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
-        obs_coords = np.linspace(obs_coords_lower_right, obs_coords_upper_right, 80)
+        obs_coords = np.linspace(obs_coords_lower_right, obs_coords_upper_right, 25)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
-        obs_coords = np.linspace(obs_coords_upper_left, obs_coords_upper_right, 80)
+        obs_coords = np.linspace(obs_coords_upper_left, obs_coords_upper_right, 25)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
 # Robot Pose Values
@@ -90,6 +90,7 @@ distance_gain = 0.3
 #params
 waypoints = []
 puckstart = (0,0)
+targetstart = (0,0)
 
 EPUCK_MAX_WHEEL_SPEED = 0.12880519 # m/s
 EPUCK_AXLE_DIAMETER = 0.053 # ePuck's wheels are 53mm apart.
@@ -428,7 +429,7 @@ def main():
             print("New IK Goal Received! Target: %s" % str(target_pose))
             print("Current pose: [%5f, %5f, %5f]\t\t Target pose: [%5f, %5f, %5f]" % (pose_x, pose_y, pose_theta, target_pose[0], target_pose[1], target_pose[2]))
             populate_map(world_map)
-            display_map(world_map)
+            # display_map(world_map)
 
         
 
@@ -441,11 +442,19 @@ def main():
             goalV = transform_world_coord_to_map_coord((target_pose[0], target_pose[1]))
             startV = transform_world_coord_to_map_coord((pose_x, pose_y))
             
+            print("GoalV = ")
+            print(goalV)
+            
+            targetstart = goalV
+            puckstart = startV
+            
             prev = dijkstra(startV)
             sol = reconstruct_path(prev, goalV)
             if startV in sol:
                 visualize_path(sol)
+                display_map(world_map)
                 state = "get_waypoint"
+                
         elif state == 'get_waypoint':
             ###################
             # Part 2.1b
@@ -464,10 +473,14 @@ def main():
             newWaypoint = (currentPoint, theta)
             waypoints.append(newWaypoint)
             
-            if waypoints == []:
+            npp = transform_world_coord_to_map_coord(nextPoint)
+            if npp[0] == targetstart[0] and npp[1] == targetstart[1]:
+                state = "get_backpath"
+            elif waypoints == []:
                 state = "get_path"
             else:
                 state = "move_to_waypoint"
+                
         elif state == 'move_to_waypoint':
             ###################
             # Part 2.1c
@@ -483,8 +496,9 @@ def main():
                 leftMotor.setVelocity(0)
                 rightMotor.setVelocity(0)
                 state = 'get_waypoint'
+                
         elif state == "get_backpath":
-            goalV = transform_world_coord_to_map_coord((target_pose[0], target_pose[1]))
+            goalV = puckstart
             startV = transform_world_coord_to_map_coord((pose_x, pose_y))
             
             prev = dijkstra(startV)
@@ -499,8 +513,11 @@ def main():
             rightMotor.setVelocity(0)    
             pass
             
+        print(state)
+        # print(waypoints)
             
-        display_map(world_map)
+            
+        # display_map(world_map)
         #print(world_map.shape[0])
     
 if __name__ == "__main__":
