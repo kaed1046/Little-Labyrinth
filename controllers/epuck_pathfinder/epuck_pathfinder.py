@@ -35,17 +35,29 @@ def populate_map(m):
         #print(size_tuple)
         obs_size = size_tuple[1]
         if size_tuple[0] == "y":
-            obs_coords_lower_left = [obs[0]-.005, obs[1] - size_tuple[1]/2]  
-            obs_coords_upper_right = [obs[0]+.005, obs[1] + size_tuple[1]/2]
-            obs_coords_lower_right = [obs[0]+.005, obs[1] - size_tuple[1]/2]  
-            obs_coords_upper_left = [obs[0]-.005, obs[1] + size_tuple[1]/2]
+            obs_coords_lower_left = [obs[0]-.045, obs[1] - size_tuple[1]/2 -.04]  
+            obs_coords_upper_right = [obs[0]+.045, obs[1] + size_tuple[1]/2 + .04]
+            obs_coords_lower_right = [obs[0]+.045, obs[1] - size_tuple[1]/2 - .04]  
+            obs_coords_upper_left = [obs[0]-.045, obs[1] + size_tuple[1]/2 + .04]
                     
         else:
-            obs_coords_lower_left = [obs[0]- size_tuple[1]/2, obs[1] - .005]  
-            obs_coords_upper_right = [obs[0]+ size_tuple[1]/2, obs[1] + .005]
-            obs_coords_lower_right = [obs[0] + size_tuple[1]/2, obs[1] - .005]  
-            obs_coords_upper_left = [obs[0] - size_tuple[1]/2, obs[1] + .005]
-
+            obs_coords_lower_left = [obs[0]- size_tuple[1]/2 - .04, obs[1] - .045]  
+            obs_coords_upper_right = [obs[0]+ size_tuple[1]/2 + .04, obs[1] + .045]
+            obs_coords_lower_right = [obs[0] + size_tuple[1]/2 + .04, obs[1] - .045]  
+            obs_coords_upper_left = [obs[0] - size_tuple[1]/2 - .04, obs[1] + .045]
+        corners = [obs_coords_lower_left,obs_coords_upper_right,obs_coords_upper_left,obs_coords_lower_right]
+        i = 0
+        for x,y in corners:
+            if x > 1:
+                corners[i][0] = .99
+            elif x < 0:
+                corners[i][0] = 0
+            if y > 1:
+                corners[i][1] = .99
+            elif y < 0:
+                corners[i][1] = 0
+            i = i+1
+                
         obs_coords = np.linspace(obs_coords_lower_left, obs_coords_upper_left, 80)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
