@@ -5,20 +5,34 @@
 import math
 import copy
 from controller import Robot, Motor, Camera
-import csci3302_lab5_supervisor
+import bb8_supervisor.py
 import numpy as np
+
+# create the Robot instance.
+bb8_supervisor.init_supervisor()
+#honestly I'm winging this
+robot = bb8_supervisor.supervisor
 
 
 #bb8 waits until it is "found" by the epuck
 state = "lost"
 
+#####Developement TODOs
+#initialize bb8 data
+    #Initialize Motors
+        #BB8 motors:
+            #body yaw motor
+                # - to turn right
+                # + to turn left
+            #body pitch motor
+                #goes forward/backward
+            #head yaw motor
+                # doesn't matter
+#update odometry data for bb8 dimensions
+    #need to find the right body pitch motor-burst to keep the bb8 just behind the epuck
+    #idea is: motor burst, locate epuck, burst epuck
 
-#########################################################
-# Starter code: You shouldn't have to modify any of this
 
-# create the Robot instance.
-csci3302_lab5_supervisor.init_supervisor()
-robot = csci3302_lab5_supervisor.supervisor
 
 # Map Variables
 MAP_BOUNDS = [1.,1.] 
@@ -70,58 +84,15 @@ def populate_map(m):
         obs_coords = np.linspace(obs_coords_upper_left, obs_coords_upper_right, 80)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
-# Robot Pose Values
-pose_x = 0
-pose_y = 0
-pose_theta = 0
-left_wheel_direction = 0
-right_wheel_direction = 0
 
-# Constants to help with the Odometry update
-WHEEL_FORWARD = 1
-WHEEL_STOPPED = 0
-WHEEL_BACKWARD = -1
-
-# GAIN Values
-theta_gain = 1.0
-distance_gain = 0.3
-
-#Notes
-#We don't want it going faster than the epuck so we
-#should retain these values
-EPUCK_MAX_WHEEL_SPEED = 0.12880519 # m/s
-EPUCK_AXLE_DIAMETER = 0.053 # ePuck's wheels are 53mm apart.
-EPUCK_WHEEL_RADIUS = 0.0205 # ePuck's wheels are 0.041m in diameter.
-
-#BB8 motors:
-    #body yaw motor
-    #body pitch motor
-    #head yaw motor
 
 # get the time step of the current world.
 SIM_TIMESTEP = int(robot.getBasicTimeStep())
 
 # Initialize Motors
-leftMotor = robot.getMotor('left wheel motor')
-rightMotor = robot.getMotor('right wheel motor')
-leftMotor.setPosition(float('inf'))
-rightMotor.setPosition(float('inf'))
-leftMotor.setVelocity(0.0)
-rightMotor.setVelocity(0.0)
-
-MAX_VEL_REDUCTION = 0.25
 
 
-def update_odometry(left_wheel_direction, right_wheel_direction, time_elapsed):
-    '''
-    Given the amount of time passed and the direction each wheel was rotating,
-    update the robot's pose information accordingly
-    '''
-    global pose_x, pose_y, pose_theta, EPUCK_MAX_WHEEL_SPEED, EPUCK_AXLE_DIAMETER
-    pose_theta += (right_wheel_direction - left_wheel_direction) * time_elapsed * EPUCK_MAX_WHEEL_SPEED / EPUCK_AXLE_DIAMETER
-    pose_x += math.cos(pose_theta) * time_elapsed * EPUCK_MAX_WHEEL_SPEED * (left_wheel_direction + right_wheel_direction)/2.
-    pose_y += math.sin(pose_theta) * time_elapsed * EPUCK_MAX_WHEEL_SPEED * (left_wheel_direction + right_wheel_direction)/2.
-    pose_theta = get_bounded_theta(pose_theta)
+#MAX_VEL_REDUCTION = 0.25
 
 def get_bounded_theta(theta):
     '''
