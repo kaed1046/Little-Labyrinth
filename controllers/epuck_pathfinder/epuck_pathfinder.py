@@ -482,7 +482,7 @@ def main():
             elif waypoints == []:
                 state = "get_path"
             else:
-                print(nextPoint[0],nextPoint[1])
+                #print(nextPoint[0],nextPoint[1])
                 state = "move_to_waypoint"
                 
         elif state == 'move_to_waypoint':

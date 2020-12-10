@@ -7,7 +7,7 @@ import operator
 
 
 
-state = "get_path"
+state = "wait"
 
 
 #########################################################
@@ -133,7 +133,7 @@ def get_wheel_speeds(target_pose):
     '''
     global pose_x, pose_y, pose_theta, left_wheel_direction, right_wheel_direction
 
-    pose_x, pose_y, pose_theta = csci3302_lab5_supervisor.supervisor_get_robot_pose()
+    pose_x, pose_y, pose_theta = csci3302_lab5_supervisor_follower.supervisor_get_robot_pose()
 
 
     bearing_error = get_bounded_theta(math.atan2( (target_pose[1] - pose_y), (target_pose[0] - pose_x) ) - pose_theta)
@@ -407,7 +407,7 @@ def main():
 
     start_pose = csci3302_lab5_supervisor_follower.supervisor_get_robot_pose()
     pose_x, pose_y, pose_theta = start_pose
-
+    count = 0
     #dijkstra([3,5])
     # Main Control Loop:
     while robot.step(SIM_TIMESTEP) != -1:
@@ -433,46 +433,77 @@ def main():
             ###################
             # Part 2.1a
             ###################       
-            # Compute a path from start to target_pose           
+            # Compute a path from start to target_pose 
+            target_pose = csci3302_lab5_supervisor_follower.supervisor_get_target_pose()
+            world_map[transform_world_coord_to_map_coord(target_pose[:2])] = 3 # Goal vertex!
+            #print("New IK Goal Received! Target: %s" % str(target_pose))
+            #print("Current pose: [%5f, %5f, %5f]\t\t Target pose: [%5f, %5f, %5f]" % (pose_x, pose_y, pose_theta, target_pose[0], target_pose[1], target_pose[2]))
+            populate_map(world_map)          
             goalV = transform_world_coord_to_map_coord((target_pose[0], target_pose[1]))
             startV = transform_world_coord_to_map_coord((pose_x, pose_y))
             
             #print("GoalV = ")
             #print(goalV)
             
-            targetstart = goalV
-            puckstart = startV
             
             prev = dijkstra(startV)
             sol = reconstruct_path(prev, goalV)
-            if len in sol:
+            #print(len)
+            if startV in sol:
                 visualize_path(sol)
                 #display_map(world_map)
-                if len(sol) <= 2:
-                    state = "get_waypoint"
                 
+                state = "get_waypoint"
+                
+        elif state == 'wait':
+            goalV = transform_world_coord_to_map_coord((target_pose[0], target_pose[1]))
+            startV = transform_world_coord_to_map_coord((pose_x, pose_y))
+            if(count == 400):
+                target_pose = csci3302_lab5_supervisor_follower.supervisor_get_target_pose()
+                world_map[transform_world_coord_to_map_coord(target_pose[:2])] = 3 # Goal vertex!
+                #print("New IK Goal Received! Target: %s" % str(target_pose))
+                #print("Current pose: [%5f, %5f, %5f]\t\t Target pose: [%5f, %5f, %5f]" % (pose_x, pose_y, pose_theta, target_pose[0], target_pose[1], target_pose[2]))
+                populate_map(world_map)
+                prev = dijkstra(startV)
+                sol = reconstruct_path(prev, goalV)
+                print(len(sol))
+                if len(sol) <= 10:
+                    state = 'get_path' 
+                count = 1
+            elif count == 0:
+                target_pose = csci3302_lab5_supervisor_follower.supervisor_get_target_pose()
+                world_map[transform_world_coord_to_map_coord(target_pose[:2])] = 3 # Goal vertex!
+                #print("New IK Goal Received! Target: %s" % str(target_pose))
+                #print("Current pose: [%5f, %5f, %5f]\t\t Target pose: [%5f, %5f, %5f]" % (pose_x, pose_y, pose_theta, target_pose[0], target_pose[1], target_pose[2]))
+                populate_map(world_map)
+                prev = dijkstra(startV)
+                starting_sol = reconstruct_path(prev, goalV)
+                count = count + 1 
+            else:
+                count = count + 1
+                pass     
         elif state == 'get_waypoint':
             ###################
             # Part 2.1b
             ###################       
             # Get the next waypoint from the path            
             # populate waypoints with solution array
-            if(len(sol) != 0):
-                x = sol.pop(0)
-            if(sol == []):
+           
+            if(len(starting_sol) != 0):
+                x = starting_sol.pop(0)
+            if(starting_sol == []):
                 theta = target_pose[2]
                 currentPoint = transform_map_coord_world_coord(x)
             else:
-                nextPoint = transform_map_coord_world_coord(sol[0])
+                nextPoint = transform_map_coord_world_coord(starting_sol[0])
                 currentPoint = transform_map_coord_world_coord(x)
                 theta = math.atan2(nextPoint[1] - currentPoint[1], nextPoint[0] - currentPoint[0])
             newWaypoint = (currentPoint, theta)
             waypoints.append(newWaypoint)
             
             npp = transform_world_coord_to_map_coord(nextPoint)
-            if npp[0] == targetstart[0] and npp[1] == targetstart[1]:
-                state = "get_backpath"
-            elif waypoints == []:
+            if waypoints == []:
+                print("at waypount - []")
                 state = "get_path"
             else:
                 state = "move_to_waypoint"
@@ -492,17 +523,9 @@ def main():
                 left_wheel_direction, right_wheel_direction = 0, 0
                 leftMotor.setVelocity(0)
                 rightMotor.setVelocity(0)
+                #print("getting_waypoint")
                 state = 'get_waypoint'
                 
-        elif state == "get_backpath":
-            goalV = puckstart
-            startV = transform_world_coord_to_map_coord((pose_x, pose_y))
-            
-            prev = dijkstra(startV)
-            sol = reconstruct_path(prev, goalV)
-            if startV in sol:
-                visualize_path(sol)
-                state = "get_waypoint"
         else:
             # Stop
             left_wheel_direction, right_wheel_direction = 0, 0
