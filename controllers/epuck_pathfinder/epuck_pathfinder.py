@@ -450,9 +450,12 @@ def main():
             
             prev = dijkstra(startV)
             sol = reconstruct_path(prev, goalV)
+           
             if startV in sol:
                 visualize_path(sol)
-                display_map(world_map)
+                #print(sol)
+                #display_map(world_map)
+                #print("ok")
                 state = "get_waypoint"
                 
         elif state == 'get_waypoint':
@@ -479,6 +482,7 @@ def main():
             elif waypoints == []:
                 state = "get_path"
             else:
+                print(nextPoint[0],nextPoint[1])
                 state = "move_to_waypoint"
                 
         elif state == 'move_to_waypoint':

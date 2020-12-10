@@ -14,8 +14,8 @@ state = "get_path"
 # Starter code: You shouldn't have to modify any of this
 
 # create the Robot instance.
-csci3302_lab5_supervisor.init_supervisor()
-robot = csci3302_lab5_supervisor.supervisor
+csci3302_lab5_supervisor_follower.init_supervisor()
+robot = csci3302_lab5_supervisor_follower.supervisor
 
 # Map Variables
 MAP_BOUNDS = [1.,1.] 
@@ -26,7 +26,7 @@ NUM_Y_CELLS = int(MAP_BOUNDS[1] / CELL_RESOLUTIONS[1])
 world_map = np.zeros([NUM_Y_CELLS,NUM_X_CELLS])
 
 def populate_map(m):
-    obs_list = csci3302_lab5_supervisor.supervisor_get_obstacle_positions()
+    obs_list = csci3302_lab5_supervisor_follower.supervisor_get_obstacle_positions()
     #obs_size = 0.06 # 6cm boxes
     for obs, size_tuple in obs_list:
         #print(size_tuple)
@@ -405,7 +405,7 @@ def main():
     # Sensor burn-in period
     for i in range(10): robot.step(SIM_TIMESTEP)
 
-    start_pose = csci3302_lab5_supervisor.supervisor_get_robot_pose()
+    start_pose = csci3302_lab5_supervisor_follower.supervisor_get_robot_pose()
     pose_x, pose_y, pose_theta = start_pose
 
     #dijkstra([3,5])
@@ -420,7 +420,7 @@ def main():
 
         # Get target location -- do not modify
         if target_pose is None:
-            target_pose = csci3302_lab5_supervisor.supervisor_get_target_pose()
+            target_pose = csci3302_lab5_supervisor_follower.supervisor_get_target_pose()
             world_map[transform_world_coord_to_map_coord(target_pose[:2])] = 3 # Goal vertex!
             print("New IK Goal Received! Target: %s" % str(target_pose))
             print("Current pose: [%5f, %5f, %5f]\t\t Target pose: [%5f, %5f, %5f]" % (pose_x, pose_y, pose_theta, target_pose[0], target_pose[1], target_pose[2]))
@@ -437,8 +437,8 @@ def main():
             goalV = transform_world_coord_to_map_coord((target_pose[0], target_pose[1]))
             startV = transform_world_coord_to_map_coord((pose_x, pose_y))
             
-            print("GoalV = ")
-            print(goalV)
+            #print("GoalV = ")
+            #print(goalV)
             
             targetstart = goalV
             puckstart = startV
@@ -447,7 +447,7 @@ def main():
             sol = reconstruct_path(prev, goalV)
             if len in sol:
                 visualize_path(sol)
-                display_map(world_map)
+                #display_map(world_map)
                 if len(sol) <= 2:
                     state = "get_waypoint"
                 

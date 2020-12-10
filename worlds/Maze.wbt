@@ -26,6 +26,22 @@ Floor {
     "textures/steel_floor.jpg"
   ]
 }
+DEF EPUCK_TARGET E-puck {
+  translation 0.8729200863134198 -3.1239817650180815e-05 0.8617667323721068
+  rotation 4.433741243212667e-05 0.9999965687491569 0.0026192602212465827 -3.106442322422656
+  name "e-puck(1)"
+  controller "epuck_follower"
+  supervisor TRUE
+  turretSlot [
+    Compass {
+    }
+    SpotLight {
+      ambientIntensity 1
+      direction 0 1 -1
+      castShadows TRUE
+    }
+  ]
+}
 DEF WALL_3_Solid Solid {
   translation 0.504661 0.05 -0.012621
   rotation 0 1 0 1.5708
@@ -480,13 +496,4 @@ DEF EPUCK E-puck {
       castShadows TRUE
     }
   ]
-}
-DEF Goal BB-8 {
-  translation 0.787352 -0.0104521 0.80208
-  rotation 0.6017141588763842 0.7825822944514941 -0.1597029223862872 -0.9447200970473824
-  controller "bb8_pathfinder"
-  supervisor TRUE
-  bodyRadius 0.025
-  headOffset 0.0025
-  headRadius 0.015
 }

@@ -25,7 +25,7 @@ def init_supervisor():
     for idx in range(root_children_field.getCount()):
         if root_children_field.getMFNode(idx).getDef() == "EPUCK":
             robot_node = root_children_field.getMFNode(idx)
-        if root_children_field.getMFNode(idx).getDef() == "Goal":
+        if root_children_field.getMFNode(idx).getDef() == "EPUCK_TARGET":
             target_node = root_children_field.getMFNode(idx) 
 
     start_translation = copy.copy(robot_node.getField("translation").getSFVec3f())
