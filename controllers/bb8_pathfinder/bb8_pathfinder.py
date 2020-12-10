@@ -5,7 +5,7 @@
 import math
 import copy
 from controller import Robot, Motor, Camera
-import bb8_supervisor.py
+import bb8_supervisor
 import numpy as np
 
 # create the Robot instance.
@@ -178,13 +178,17 @@ def main():
         last_odometry_update_time = robot.getTime()
 
         # Get target location -- do not modify
-        if target_pose is None:
+        #need to coninually update for finding the robot's position
+        #if target_pose is None:
+            #target_pose = csci3302_lab5_supervisor.supervisor_get_target_pose()
+            #world_map[transform_world_coord_to_map_coord(target_pose[:2])] = 3 # Goal vertex!
+            #print("New IK Goal Received! Target: %s" % str(target_pose))
+            #print("Current pose: [%5f, %5f, %5f]\t\t Target pose: [%5f, %5f, %5f]" % (pose_x, pose_y, pose_theta, target_pose[0], target_pose[1], target_pose[2]))
+            #populate_map(world_map)
+            #display_map(world_map)
+        if state == "lost" :
             target_pose = csci3302_lab5_supervisor.supervisor_get_target_pose()
-            world_map[transform_world_coord_to_map_coord(target_pose[:2])] = 3 # Goal vertex!
-            print("New IK Goal Received! Target: %s" % str(target_pose))
-            print("Current pose: [%5f, %5f, %5f]\t\t Target pose: [%5f, %5f, %5f]" % (pose_x, pose_y, pose_theta, target_pose[0], target_pose[1], target_pose[2]))
-            populate_map(world_map)
-            display_map(world_map)
+            
 
         
 
