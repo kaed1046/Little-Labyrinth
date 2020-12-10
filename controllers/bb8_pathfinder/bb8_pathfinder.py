@@ -187,7 +187,10 @@ def main():
             #populate_map(world_map)
             #display_map(world_map)
         if state == "lost" :
-            target_pose = csci3302_lab5_supervisor.supervisor_get_target_pose()
+            target_pose = bb8_supervisor.supervisor_get_target_pose()
+            #finds the epuck's position
+            if target_pose == start_pose: #will probably have to edit to make within a certain range
+                state = 'get_path'
             
 
         
@@ -206,7 +209,7 @@ def main():
             prev = dijkstra(startV)
             sol = reconstruct_path(prev, goalV)
             path_length = len(prev)
-            display_map(world_map)
+            #display_map(world_map)
             counter = 1
             if startV in sol:
                 visualize_path(sol)
