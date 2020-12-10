@@ -98,16 +98,18 @@ SIM_TIMESTEP = int(robot.getBasicTimeStep())
 pose_x = 0
 pose_y = 0
 pose_theta = 0
-left_wheel_direction = 0
-right_wheel_direction = 0
+robot_direction = 0
 #?
 
 # Constants to help with the Odometry update
 #?
 WHEEL_FORWARD = 1
+WHEEL_LEFT = 2
 WHEEL_STOPPED = 0
+WHEEL_RIGHT = -2
 WHEEL_BACKWARD = -1
-
+# forward is pitch forward or yaw to right
+# back is pitch back and yaw left
 # GAIN Values
 theta_gain = 1.0
 distance_gain = 0.3
@@ -117,9 +119,9 @@ waypoints = []
 puckstart = (0,0)
 targetstart = (0,0)
 
-EPUCK_MAX_WHEEL_SPEED = 0.12880519 # m/s
-EPUCK_AXLE_DIAMETER = 0.053 # ePuck's wheels are 53mm apart.
-EPUCK_WHEEL_RADIUS = 0.0205 # ePuck's wheels are 0.041m in diameter.
+BB8_MAX_WHEEL_SPEED = 0.12880519 # m/s
+#EPUCK_AXLE_DIAMETER = 0.053 # ePuck's wheels are 53mm apart.
+BB8_WHEEL_RADIUS = 0.025 # ePuck's wheels are 0.041m in diameter.
 
 
 # get the time step of the current world.
@@ -143,6 +145,25 @@ MAX_VEL_REDUCTION = 0.25
 #idk if we need this
 #MAX_VEL_REDUCTION = 0.25
 
+def update_odometry(robot_direction, time_elapsed):
+    '''
+    Given the amount of time passed and the direction each wheel was rotating,
+    update the robot's pose information accordingly
+    '''
+    global pose_x, pose_y, pose_theta, EPUCK_MAX_WHEEL_SPEED, EPUCK_AXLE_DIAMETER
+    pose_theta += (right_wheel_direction - left_wheel_direction) * time_elapsed * EPUCK_MAX_WHEEL_SPEED / EPUCK_AXLE_DIAMETER
+    pose_x += math.cos(pose_theta) * time_elapsed * EPUCK_MAX_WHEEL_SPEED * (left_wheel_direction + right_wheel_direction)/2.
+    pose_y += math.sin(pose_theta) * time_elapsed * EPUCK_MAX_WHEEL_SPEED * (left_wheel_direction + right_wheel_direction)/2.
+    pose_theta = get_bounded_theta(pose_theta)
+
+def get_bounded_theta(theta):
+    '''
+    Returns theta bounded in [-PI, PI]
+    '''
+    while theta > math.pi: theta -= 2.*math.pi
+    while theta < -math.pi: theta += 2.*math.pi
+    return theta
+
 
 def main():
     global robot, state, sub_state, map
@@ -153,8 +174,8 @@ def main():
 
     # Keep track of which direction each wheel is turning
     #need to update this to just rotate or something like that
-    left_wheel_direction = WHEEL_STOPPED
-    right_wheel_direction = WHEEL_STOPPED
+    robot_direction = WHEEL_STOPPED
+    #right_wheel_direction = WHEEL_STOPPED
 
     # Important IK Variable storing final desired pose
     target_pose = None # Populated by the supervisor, only when the target is moved.
@@ -174,7 +195,7 @@ def main():
         if last_odometry_update_time is None:
             last_odometry_update_time = robot.getTime()
         time_elapsed = robot.getTime() - last_odometry_update_time
-        update_odometry(left_wheel_direction, right_wheel_direction, time_elapsed)
+        update_odometry(robot_direction, time_elapsed)
         last_odometry_update_time = robot.getTime()
 
         # Get target location -- do not modify
