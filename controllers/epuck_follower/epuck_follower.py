@@ -458,7 +458,7 @@ def main():
         elif state == 'wait':
             goalV = transform_world_coord_to_map_coord((target_pose[0], target_pose[1]))
             startV = transform_world_coord_to_map_coord((pose_x, pose_y))
-            if(count == 400):
+            if(count == 300):
                 target_pose = csci3302_lab5_supervisor_follower.supervisor_get_target_pose()
                 world_map[transform_world_coord_to_map_coord(target_pose[:2])] = 3 # Goal vertex!
                 #print("New IK Goal Received! Target: %s" % str(target_pose))

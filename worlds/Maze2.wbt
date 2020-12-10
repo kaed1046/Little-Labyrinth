@@ -4,8 +4,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation -0.9993268622184155 0.015227684043168033 -0.03337574100117702 1.310842100809963
-  position 0.40356227796745314 2.769292042853417 1.268700638716462
+  orientation -0.987895733833709 -0.09286170376000809 -0.12425265811219519 1.438097665764337
+  position 0.3440179828857707 1.760604892236406 1.1546210200578513
   follow "e-puck"
 }
 Background {
@@ -116,7 +116,7 @@ DEF WALL_1_Solid_x Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid_y Solid {
-  translation 0.59004 0.05 0.130903
+  translation 0.594513 0.05 0.158266
   rotation 0 1 0 1.5708
   children [
     DEF MAZE_WALL Shape {
@@ -185,7 +185,7 @@ DEF WALL_1_Solid_x Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid_x Solid {
-  translation 0.07 0.05 0.58867
+  translation 0.080173 0.05 0.589501
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -238,7 +238,7 @@ DEF WALL_1_Solid_x Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid_x Solid {
-  translation 0.912561 0.05 0.734072
+  translation 0.907664 0.05 0.733407
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -448,14 +448,10 @@ DEF WALL_3_Solid_y Solid {
 DirectionalLight {
   direction 0 1 0
 }
-DEF EPUCK E-puck {
-  hidden position_0_0 -1.7971011330116065
-  hidden position_0_1 2.1100535693631404
-  hidden rotation_1 1 0 0 1.7971011330116065
-  hidden rotation_2 -1 0 0 2.1100535693631404
-  translation 0.133058 -3.20213e-05 0.89505
-  rotation -0.0009586758353819605 0.9999989127665615 -0.0011204491676651217 -1.7335960351965438
-  controller "epuck_pathfinder"
+DEF EPUCK_TARGET E-puck {
+  translation 0.780001 -3.20213e-05 0.789538
+  rotation -0.0011749699971807031 0.9999899976005612 0.00431556998964495 0.508071
+  controller "epuck_follower"
   supervisor TRUE
   turretSlot [
     Compass {
@@ -467,16 +463,19 @@ DEF EPUCK E-puck {
     }
   ]
 }
-DEF Goal BB-8 {
-  hidden position_0_0 0.7719776762727925
-  hidden position_0_1 0.7719776796471579
-  hidden rotation_3 0 0.9999999999999999 0 0.7719776762727925
-  hidden position_3_0 3.455480830122835
-  hidden rotation_4 1 0 0 3.455480830122835
-  hidden rotation_7 0 1 0 0.7719776796471578
-  translation 0.794004 -0.00884204 0.692461
-  rotation 0.4199570022356805 0.722212474958032 -0.5495864420527627 -1.0646036151263316
-  bodyRadius 0.025
-  headOffset 0.0025
-  headRadius 0.015
+DEF EPUCK E-puck {
+  translation 0.149895 -3.20213e-05 0.865095
+  rotation -0.0009586758353819605 0.9999989127665615 -0.0011204491676651217 -1.7335960351965438
+  name "e-puck(1)"
+  controller "epuck_pathfinder"
+  supervisor TRUE
+  turretSlot [
+    Compass {
+    }
+    SpotLight {
+      ambientIntensity 1
+      direction 0 1 -1
+      castShadows TRUE
+    }
+  ]
 }

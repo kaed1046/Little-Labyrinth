@@ -405,7 +405,7 @@ def main():
     # Important IK Variable storing final desired pose
     target_pose = None # Populated by the supervisor, only when the target is moved.
 
-
+    check = 0
     # Sensor burn-in period
     for i in range(10): robot.step(SIM_TIMESTEP)
 
@@ -466,6 +466,10 @@ def main():
             # populate waypoints with solution array
             if(len(sol) != 0):
                 x = sol.pop(0)
+            if len(sol) <= 5 and check == 0:
+                check = 1
+                state = "get_backpath"
+                continue
             if(sol == []):
                 theta = target_pose[2]
                 currentPoint = transform_map_coord_world_coord(x)
@@ -478,6 +482,7 @@ def main():
             
             npp = transform_world_coord_to_map_coord(nextPoint)
             if npp[0] == targetstart[0] and npp[1] == targetstart[1]:
+                print("ok")
                 state = "get_backpath"
             elif waypoints == []:
                 state = "get_path"
