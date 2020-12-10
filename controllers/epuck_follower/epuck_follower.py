@@ -55,16 +55,16 @@ def populate_map(m):
                 corners[i][1] = 0
             i = i+1
                 
-        obs_coords = np.linspace(obs_coords_lower_left, obs_coords_upper_left, 25)
+        obs_coords = np.linspace(obs_coords_lower_left, obs_coords_upper_left, 30)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
-        obs_coords = np.linspace(obs_coords_lower_left, obs_coords_lower_right, 25)
+        obs_coords = np.linspace(obs_coords_lower_left, obs_coords_lower_right, 30)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
-        obs_coords = np.linspace(obs_coords_lower_right, obs_coords_upper_right, 25)
+        obs_coords = np.linspace(obs_coords_lower_right, obs_coords_upper_right, 30)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
-        obs_coords = np.linspace(obs_coords_upper_left, obs_coords_upper_right, 25)
+        obs_coords = np.linspace(obs_coords_upper_left, obs_coords_upper_right, 30)
         for coord in obs_coords:
             m[transform_world_coord_to_map_coord(coord)] = 1
 # Robot Pose Values

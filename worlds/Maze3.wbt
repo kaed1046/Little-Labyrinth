@@ -4,8 +4,8 @@ WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.9987821909116933 0.0003765705828798426 0.04933551775580821 5.192279719054298
-  position 0.5875011109732088 1.3469308798250006 1.253846403035635
+  orientation 0.9974055072513524 0.02575903514289067 0.06722147137023773 4.802081795324538
+  position 0.7164166920896831 1.8302515132571988 0.3532958210021462
   follow "e-puck"
 }
 Background {
@@ -27,7 +27,7 @@ Floor {
   ]
 }
 DEF EPUCK_TARGET E-puck {
-  translation 0.655639 0.00405402 0.0889226
+  translation 0.875507 0.00405468 0.0811918
   rotation 4.433741243212667e-05 0.9999965687491569 0.0026192602212465827 -3.106442322422656
   name "e-puck(1)"
   controller "epuck_follower"
@@ -129,24 +129,6 @@ DEF WALL_1_Solid_x Solid {
     }
   ]
   name "solid 8"
-  boundingObject USE MAZE_WALL
-}
-DEF WALL_1_Solid_y Solid {
-  translation 0.59004 0.05 0.130903
-  rotation 0 1 0 1.5708
-  children [
-    DEF MAZE_WALL Shape {
-      appearance Appearance {
-        material Material {
-          diffuseColor 0.2 0.5 0.4
-        }
-      }
-      geometry Box {
-        size 0.28 0.1 0.01
-      }
-    }
-  ]
-  name "solid 9"
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid_x Solid {
@@ -356,7 +338,7 @@ DEF WALL_3_Solid_y Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_1_Solid_x Solid {
-  translation 0.85 0.05 0.16
+  translation 0.86 0.05 0.16
   children [
     DEF MAZE_WALL Shape {
       appearance Appearance {
@@ -426,7 +408,7 @@ DEF WALL_3_Solid_y Solid {
   boundingObject USE MAZE_WALL
 }
 DEF WALL_3_Solid_y Solid {
-  translation 0.59 0.05 0.41
+  translation 0.59 0.05 0.27
   rotation 1 0 0 3.1415926
   children [
     DEF MAZE_WALL Shape {
@@ -436,7 +418,7 @@ DEF WALL_3_Solid_y Solid {
         }
       }
       geometry Box {
-        size 0.01 0.1 0.28
+        size 0.01 0.1 0.56
       }
     }
   ]
