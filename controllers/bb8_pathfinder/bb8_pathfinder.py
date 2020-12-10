@@ -18,6 +18,9 @@ robot = bb8_supervisor.supervisor
 state = "lost"
 
 #####Developement TODOs
+#bb8_supervisor
+    #needs to be able to read in the epucks location
+    #so that we change flag to "found" when epuck location = bb8 location (it bumps into it)
 #initialize bb8 data
     #Initialize Motors
         #BB8 motors:
@@ -30,7 +33,8 @@ state = "lost"
                 # doesn't matter
 #update odometry data for bb8 dimensions
     #need to find the right body pitch motor-burst to keep the bb8 just behind the epuck
-    #idea is: motor burst, locate epuck, burst epuck
+    #idea is: locate epuck, rotate to face direction, motor burst, locate epuck, ...
+   
 
 
 
@@ -43,6 +47,7 @@ NUM_Y_CELLS = int(MAP_BOUNDS[1] / CELL_RESOLUTIONS[1])
 world_map = np.zeros([NUM_Y_CELLS,NUM_X_CELLS])
 
 def populate_map(m):
+    #i don't think it matters if we change this so I didn't
     obs_list = csci3302_lab5_supervisor.supervisor_get_obstacle_positions()
     #obs_size = 0.06 # 6cm boxes
     for obs, size_tuple in obs_list:
@@ -89,7 +94,54 @@ def populate_map(m):
 # get the time step of the current world.
 SIM_TIMESTEP = int(robot.getBasicTimeStep())
 
+# Odometry data TODO:
+pose_x = 0
+pose_y = 0
+pose_theta = 0
+left_wheel_direction = 0
+right_wheel_direction = 0
+#?
+
+# Constants to help with the Odometry update
+#?
+WHEEL_FORWARD = 1
+WHEEL_STOPPED = 0
+WHEEL_BACKWARD = -1
+
+# GAIN Values
+theta_gain = 1.0
+distance_gain = 0.3
+
+#params
+waypoints = []
+puckstart = (0,0)
+targetstart = (0,0)
+
+EPUCK_MAX_WHEEL_SPEED = 0.12880519 # m/s
+EPUCK_AXLE_DIAMETER = 0.053 # ePuck's wheels are 53mm apart.
+EPUCK_WHEEL_RADIUS = 0.0205 # ePuck's wheels are 0.041m in diameter.
+
+
+# get the time step of the current world.
+SIM_TIMESTEP = int(robot.getBasicTimeStep())
+
 # Initialize Motors
+#leftMotor = robot.getMotor('left wheel motor')
+#rightMotor = robot.getMotor('right wheel motor')
+yawMotor = robot.getMotor('body yaw motor')
+#body yaw motor
+                # - to turn right
+                # + to turn left
+            #body pitch motor
+                #goes forward/backward
+            #head yaw motor
+                # doesn't matter
+leftMotor.setPosition(float('inf'))
+rightMotor.setPosition(float('inf'))
+leftMotor.setVelocity(0.0)
+rightMotor.setVelocity(0.0)
+
+MAX_VEL_REDUCTION = 0.25
 
 
 #MAX_VEL_REDUCTION = 0.25
@@ -352,6 +404,7 @@ def main():
     last_odometry_update_time = None
 
     # Keep track of which direction each wheel is turning
+    #need to update this to just rotate or something like that
     left_wheel_direction = WHEEL_STOPPED
     right_wheel_direction = WHEEL_STOPPED
 
@@ -362,7 +415,8 @@ def main():
     # Sensor burn-in period
     for i in range(10): robot.step(SIM_TIMESTEP)
 
-    start_pose = csci3302_lab5_supervisor.supervisor_get_robot_pose()
+    #start_pose = csci3302_lab5_supervisor.supervisor_get_robot_pose()
+    start_pose = bb8_supervisor.supervisor_get_robot_pose()
     pose_x, pose_y, pose_theta = start_pose
 
     #dijkstra([3,5])
