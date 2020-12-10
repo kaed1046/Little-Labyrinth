@@ -505,6 +505,9 @@ def main():
             if waypoints == []:
                 print("at waypount - []")
                 state = "get_path"
+            if len(starting_sol) <= 5:
+                state = "stopped"
+                continue
             else:
                 state = "move_to_waypoint"
                 
