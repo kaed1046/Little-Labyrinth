@@ -4,6 +4,7 @@
 #  from controller import Robot, Motor, DistanceSensor
 import copy
 from controller import Supervisor
+import sys
 import numpy as np
 import math
 
